@@ -1,6 +1,7 @@
 package com.chess.chessboard.model;
 
 import com.chess.chessboard.enums.MoveType;
+import com.chess.chessboard.enums.PieceType;
 import com.chess.chessboard.pieces.Piece;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,5 +13,11 @@ public class Move {
     private Position to;
     private Piece piece;
     private Piece capturedPiece;
-private MoveType moveType;
+    private MoveType moveType;
+    private PieceType promotionPieceType;
+
+    public Move(Position from, Position to, Piece piece,
+                Piece capturedPiece, MoveType moveType) {
+        this(from, to, piece, capturedPiece, moveType, null);
+    }
 }

@@ -1,110 +1,28 @@
-
-.chess-board {
-  display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  grid-template-rows: repeat(8, minmax(0, 1fr));
-  width: min(90vw, 560px);
-  aspect-ratio: 1 / 1;
-  border: 6px solid #49382b;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.square {
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  user-select: none;
-}
-
-.chess-piece {
-  font-size: clamp(24px, 5vw, 48px);
-  line-height: 1;
-}
-
-.light {
-  background-color: #f0d9b5;
-}
-
-.dark {
-  background-color: #b58863;
-}
-
-.selected {
-  background-color: #f4d35e;
-}
-
-.chess-piece {
-  font-size: clamp(28px, 5vw, 52px);
-  line-height: 1;
-}
-
-.square:hover {
-  filter: brightness(1.1);
-}
-
-.app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 24px;
-  background-color: #f8f6f2;
-  font-family: Arial, sans-serif;
-}
-
-.app h1 {
-  font-size: 32px;
-  color: #49382b;
-  margin: 0;
-}
-
-.game-info {
-  display: flex;
-  gap: 30px;
-  color: #49382b;
-}
-
-.game-info p {
-  margin: 0;
-}
-
-.new-game-button {
-  background-color: #49382b;
-  color: white;
-  border: none;
-  padding: 12px 28px;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.new-game-button:hover {
-  background-color: #6b513c;
-}
-
-.new-game-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.message {
-  color: #b42318;
-  font-weight: 500;
-}
-
-@media (max-width: 600px) {
-  .game-info {
-    flex-direction: column;
-    gap: 6px;
-    text-align: center;
-  }
-}
-
+:root { --ink:#17221d; --green:#173f35; --green-2:#245d4d; --cream:#f7f4ec; --gold:#d9ad63; --muted:#6f7873; --line:#dddcd4; }
+.app-shell { min-height:100vh; background:radial-gradient(circle at 25% 0%, #fff 0, transparent 32%), #efeee8; }
+.topbar { height:76px; padding:0 clamp(20px,5vw,72px); display:flex; align-items:center; justify-content:space-between; background:rgba(250,249,245,.9); border-bottom:1px solid rgba(23,34,29,.09); backdrop-filter:blur(12px); }
+.brand { display:flex; gap:12px; align-items:center; color:var(--ink); text-decoration:none; font:700 23px "Playfair Display",serif; }
+.brand-mark { width:40px; height:40px; border-radius:12px; display:grid; place-items:center; color:#f7e7c8; background:var(--green); box-shadow:0 6px 18px rgba(23,63,53,.18); }
+.brand-mark.large { width:68px; height:68px; margin-bottom:48px; background:#ead7ac; color:var(--green); }
+.brand-logo{width:30px;height:30px;overflow:visible;color:inherit}.brand-logo .logo-crown{fill:currentColor;stroke:none}.brand-logo .logo-base{fill:none;stroke:currentColor;stroke-width:4;stroke-linecap:round}.brand-logo circle{fill:#f8f2e4;stroke:none}.brand-mark.large .brand-logo{width:48px;height:48px}.brand-mark.large .brand-logo circle{fill:#173f35}
+.header-actions,.user-chip { display:flex; align-items:center; gap:10px; }.user-chip { color:#445049; font-weight:600; font-size:14px; }.user-chip>span { width:33px;height:33px;display:grid;place-items:center;border-radius:50%;background:#dbe6df;color:var(--green); }
+.icon-button { border:0;background:transparent;color:#69736e;padding:8px;cursor:pointer;border-radius:8px; }.icon-button:hover{background:#e8e8e2;color:var(--ink)} svg { width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round; }
+.game-layout { width:min(1180px, calc(100% - 40px)); margin:0 auto; padding:38px 0 48px; display:grid; grid-template-columns:minmax(0, 720px) 330px; gap:42px; align-items:start; }
+.game-heading { display:flex;align-items:end;justify-content:space-between;margin-bottom:20px; }.eyebrow { margin:0 0 5px;text-transform:uppercase;letter-spacing:.16em;font-size:10px;font-weight:700;color:#8a7560; }.game-heading h1{font:700 clamp(28px,4vw,40px) "Playfair Display",serif;margin:0;}
+.status-badge { display:flex;align-items:center;gap:8px;padding:8px 12px;background:#e4eee8;color:#28634e;border-radius:99px;text-transform:capitalize;font-size:12px;font-weight:700; }.status-badge span{width:7px;height:7px;border-radius:50%;background:#3c9a73;box-shadow:0 0 0 4px rgba(60,154,115,.14)}.status-badge.finished{background:#f2e4cc;color:#80602d}
+.player-row { display:flex;align-items:center;min-height:54px;padding:8px 2px;gap:12px; }.player-row.opponent{margin-bottom:8px}.player-row>div:nth-child(2){display:grid;gap:2px}.player-row strong{font-size:14px}.player-row span{font-size:11px;color:var(--muted)}.avatar{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font:bold 14px "Playfair Display",serif;box-shadow:0 4px 12px rgba(0,0,0,.1)}.avatar.dark{background:#26312c;color:#fff}.avatar.light-avatar{background:#fff;color:#26312c;border:1px solid #deded7}
+.player-clock{margin-left:auto;min-width:90px;padding:8px 12px;border:1px solid #d9d9d2;border-radius:9px;background:#f8f7f2;color:#59635e;font:700 17px/1 "DM Sans",sans-serif;letter-spacing:.04em;display:flex;align-items:center;justify-content:center;gap:8px;font-variant-numeric:tabular-nums;transition:.2s ease}.player-clock .clock-dot{width:6px;height:6px;border-radius:50%;background:#adb3af}.player-clock.active{color:#fff;background:var(--green);border-color:var(--green);box-shadow:0 6px 16px rgba(23,63,53,.2)}.player-clock.active .clock-dot{background:#74d6a7;box-shadow:0 0 0 3px rgba(116,214,167,.16)}.player-clock.expired{color:#9c332c;background:#fae9e5;border-color:#e9c1ba}.player-clock.expired .clock-dot{background:#c64f43}
+.board-frame { padding:14px;background:#20372f;border-radius:8px;box-shadow:0 26px 55px rgba(30,43,37,.24), 0 3px 8px rgba(30,43,37,.18); }.chess-board{display:grid;grid-template-columns:repeat(8,1fr);width:100%;aspect-ratio:1;overflow:hidden;border:1px solid rgba(255,255,255,.12)}.chess-board.disabled{pointer-events:none;opacity:.86}
+.square{position:relative;border:0;padding:0;display:grid;place-items:center;cursor:pointer;user-select:none;aspect-ratio:1}.square.light{background:#e9dfca}.square.dark{background:#78937c}.square:hover{box-shadow:inset 0 0 0 4px rgba(255,220,130,.45)}.square.selected{box-shadow:inset 0 0 0 5px #e1b65f;background:#cfb86e}.square:focus-visible{z-index:2;outline:4px solid #fff;outline-offset:-4px}
+.chess-piece{font-family:"Times New Roman",serif;font-size:clamp(31px,5.5vw,62px);line-height:1;transform:translateY(-1px);filter:drop-shadow(0 3px 1px rgba(0,0,0,.18));}.chess-piece.white{color:#fff8e9;text-shadow:0 0 1px #26372f,1px 1px 0 #26372f,-1px -1px 0 #26372f}.chess-piece.black{color:#17231e;text-shadow:0 1px 0 rgba(255,255,255,.18)}
+.rank-label,.file-label{position:absolute;font-size:9px;font-weight:700;opacity:.75}.rank-label{left:4px;top:3px}.file-label{right:4px;bottom:3px}.light .rank-label,.light .file-label{color:#46614e}.dark .rank-label,.dark .file-label{color:#f3ead8}
+.board-loading{aspect-ratio:1;background:#e9dfca;display:grid;place-items:center;color:#65726b}.board-loading span{font-size:70px;display:block}.notice{margin-top:12px;padding:12px 15px;border-radius:8px;background:#fff7e5;color:#75571e;font-size:13px;border:1px solid #ead8ad}
+.game-panel{margin-top:75px;background:#fbfaf6;border:1px solid rgba(23,34,29,.08);border-radius:14px;box-shadow:0 16px 40px rgba(32,44,38,.08);overflow:hidden}.panel-section{padding:24px}.turn-card{border-bottom:1px solid var(--line);background:linear-gradient(135deg,#f8f4e8,#fff)}.turn-display{display:flex;align-items:center;gap:14px}.turn-display>div:last-child{display:grid;gap:2px}.turn-display span{font-size:11px;color:var(--muted)}.turn-display strong{font:600 22px "Playfair Display",serif}.turn-piece{height:50px;width:50px;border-radius:12px;display:grid;place-items:center;font:36px "Times New Roman",serif}.turn-piece.white{background:#fff;border:1px solid #ddd}.turn-piece.black{background:#25342d;color:white}
+.clock-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid #e4e0d7}.clock-summary>div{display:flex;align-items:center;justify-content:space-between;padding:9px 10px;border-radius:7px;background:rgba(255,255,255,.7)}.clock-summary span{font-size:10px}.clock-summary strong{font:700 14px "DM Sans",sans-serif;font-variant-numeric:tabular-nums}
+.history-section{padding-bottom:12px}.section-title{display:flex;justify-content:space-between;align-items:end}.section-title h2{font:600 21px "Playfair Display",serif;margin:0}.section-title>span{font-size:11px;background:#ebe9e1;padding:4px 8px;border-radius:99px;color:#6c736f}.move-list{margin-top:18px;max-height:320px;overflow:auto}.empty-history{text-align:center;padding:30px 10px 38px;color:#7a817d}.empty-history>span{font:38px "Times New Roman",serif;color:#a7afa9}.empty-history p{margin:8px 0 3px;font-size:13px;font-weight:600;color:#58625c}.empty-history small{font-size:11px}.move-row{display:grid;grid-template-columns:25px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #ecebe5;font-size:11px}.move-row>span{color:#9a9e9b}.move-row strong{text-transform:capitalize}.move-row code{font-family:inherit;color:#526059}.move-row em{grid-column:2/4;font-size:9px;color:#9a7040;text-transform:uppercase;font-style:normal}.panel-actions{padding:18px 24px 22px;border-top:1px solid var(--line)}
+.secondary-button,.primary-button,.undo-button{border:0;border-radius:8px;font-weight:700;cursor:pointer}.action-buttons{display:grid;grid-template-columns:.75fr 1.25fr;gap:8px}.secondary-button,.undo-button{height:44px;display:flex;align-items:center;justify-content:center;gap:8px}.secondary-button{background:var(--green);color:#fff}.undo-button{background:#ebe9e1;color:#4e5b54;border:1px solid #dad8cf}.undo-button:hover:not(:disabled){background:#dedbd0;color:var(--ink)}.secondary-button:hover,.primary-button:hover{background:var(--green-2)}button:disabled{opacity:.55;cursor:not-allowed}.panel-actions p{display:flex;align-items:center;justify-content:center;gap:5px;margin:12px 0 0;color:#8a918d;font-size:9px}.panel-actions p svg{width:12px;height:12px}
+.login-shell{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr}.login-brand{position:relative;overflow:hidden;padding:clamp(42px,6vw,82px);display:grid;grid-template-rows:auto 1fr auto;color:#f7f1e4;background:#143d33}.login-brand:before{content:"";position:absolute;inset:0;opacity:.055;background-image:linear-gradient(90deg,#fff 1px,transparent 1px),linear-gradient(#fff 1px,transparent 1px);background-size:72px 72px;transform:rotate(-7deg) scale(1.15)}.login-brand>*{position:relative;z-index:1}.hero-brand{display:flex;align-items:center;gap:13px}.hero-brand .brand-mark.large{width:48px;height:48px;margin:0;border-radius:10px}.hero-brand .brand-logo{width:34px;height:34px}.hero-brand>div:last-child{display:grid;gap:2px}.hero-brand strong{text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:#f1d18f}.hero-brand span{font-size:9px;color:#95afa6}.hero-copy{align-self:center;max-width:540px;padding:55px 0}.hero-copy .eyebrow{color:#d8b774}.hero-copy h1{font:600 clamp(42px,5.2vw,66px)/1.02 "Playfair Display",serif;letter-spacing:-.035em;margin:12px 0 20px}.hero-copy h1 em{color:#e9cf9b;font-weight:400}.hero-copy>p:last-child{max-width:390px;margin:0;color:#b8cbc4;font-size:14px;line-height:1.7}.position-card{width:min(390px,85%);display:grid;grid-template-columns:1fr auto;gap:14px 20px;align-items:center;padding:18px 20px;border:1px solid rgba(238,216,169,.22);border-left:3px solid #dfbd79;background:rgba(5,27,21,.35)}.position-card>div:first-child{display:grid;gap:4px}.position-card>div:first-child span,.position-card small{font-size:8px;letter-spacing:.15em;color:#91aaa1;text-transform:uppercase}.position-card strong{font:500 18px "Playfair Display",serif;letter-spacing:.08em}.position-card small{grid-column:1/3;padding-top:12px;border-top:1px solid rgba(255,255,255,.09);color:#d4b873}.position-sequence{display:flex;align-items:center;gap:9px;font:27px "Times New Roman",serif}.position-sequence i{width:28px;height:1px;background:#6f8d82}
+.login-panel{display:grid;place-items:center;padding:35px;background:#f1f0e9}.login-card{width:min(470px,100%);padding:32px;border:1px solid rgba(23,63,53,.1);border-radius:20px;background:#fffdf8;box-shadow:0 24px 60px rgba(27,45,36,.09)}.auth-tabs{width:max-content;display:flex;gap:4px;padding:4px;margin-bottom:34px;border-radius:10px;background:#eeeee8}.auth-tabs button{padding:9px 16px;border:0;border-radius:7px;background:transparent;color:#747c77;font-size:11px;font-weight:700;cursor:pointer}.auth-tabs button.active{background:#fff;color:var(--green);box-shadow:0 3px 10px rgba(31,48,40,.1)}.account-heading{display:flex;align-items:flex-start;gap:16px}.account-icon{flex:0 0 auto;width:48px;height:48px;display:grid;place-items:center;border-radius:13px;background:var(--green);color:#f2dcae;font:28px "Times New Roman",serif;box-shadow:0 8px 18px rgba(23,63,53,.2)}.account-heading .eyebrow{margin-top:2px}.login-card h2{max-width:340px;font:700 33px/1.08 "Playfair Display",serif;margin:4px 0 0;letter-spacing:-.025em}.login-card .account-copy{margin:20px 0 24px;padding-left:64px;color:#747c77;font-size:13px;line-height:1.65}.account-fields{padding:20px;border:1px solid #e1e1da;border-radius:13px;background:#f8f7f2}.login-card label{display:grid;gap:8px;margin-bottom:16px;font-size:11px;font-weight:700;color:#3c493f}.login-card label:last-child{margin-bottom:0}.login-card input{height:48px;border:1px solid #d7d8d2;border-radius:8px;background:#fff;padding:0 14px;outline:none;color:var(--ink);font-size:14px}.login-card input:focus{border-color:#35715c;box-shadow:0 0 0 3px rgba(53,113,92,.1)}.primary-button{height:50px;width:100%;margin-top:8px;background:var(--green);color:#fff}.login-card .form-error{margin:14px 0 0;padding:10px 12px;border-radius:7px;background:#fff0ed;color:#a9342c;font-size:11px}.account-submit{height:54px;margin-top:18px;padding:0 18px;display:flex;align-items:center;justify-content:space-between}.account-submit span:last-child{font-size:20px;font-weight:400}.login-card .account-note{margin:14px 0 0;display:flex;align-items:center;justify-content:center;gap:6px;color:#8a918d;font-size:9px}.account-note svg{width:12px;height:12px}
+.promotion-backdrop{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:rgba(13,27,22,.64);backdrop-filter:blur(6px)}.promotion-dialog{width:min(480px,100%);padding:32px;border:1px solid rgba(255,255,255,.55);border-radius:18px;background:#fbfaf6;box-shadow:0 30px 80px rgba(5,18,13,.35);text-align:center}.promotion-dialog h2{margin:4px 0 8px;font:700 30px "Playfair Display",serif}.promotion-dialog>p:not(.eyebrow){margin:0 auto 24px;color:var(--muted);font-size:13px}.promotion-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.promotion-options button{display:grid;place-items:center;gap:5px;padding:13px 6px;border:1px solid #d9d8d0;border-radius:12px;background:#fff;color:var(--ink);cursor:pointer;transition:.18s ease}.promotion-options button:hover:not(:disabled),.promotion-options button:focus-visible{border-color:var(--gold);background:#f7edda;transform:translateY(-2px);outline:none}.promotion-options span{font:42px/1 "Times New Roman",serif}.promotion-options strong{font-size:11px}.promotion-cancel{margin-top:18px;padding:8px 14px;border:0;background:transparent;color:#707873;text-decoration:underline;cursor:pointer}
+@media(max-width:900px){.game-layout{grid-template-columns:1fr;max-width:700px}.game-panel{margin-top:0}.login-shell{grid-template-columns:1fr}.login-brand{min-height:430px;padding:38px 45px}.hero-copy{padding:50px 0 35px}.hero-copy h1{font-size:48px}.position-card{position:absolute;right:42px;bottom:38px;width:280px}.login-panel{padding:55px 25px}}
+@media(max-width:560px){.topbar{height:64px;padding:0 16px}.brand{font-size:19px}.brand-mark{width:34px;height:34px}.user-chip{font-size:0}.game-layout{width:calc(100% - 24px);padding:24px 0;gap:22px}.game-heading{align-items:center}.board-frame{padding:7px}.chess-piece{font-size:clamp(27px,10vw,48px)}.player-row{padding-inline:2px}.login-brand{min-height:370px;padding:28px}.hero-brand .brand-mark.large{width:42px;height:42px}.hero-copy{padding:42px 0 0}.hero-copy h1{font-size:39px;margin-bottom:12px}.hero-copy>p:last-child{font-size:12px}.position-card{display:none}.login-panel{padding:28px 14px}.login-card{padding:24px 18px}.login-card h2{font-size:28px}.login-card .account-copy{padding-left:0}.account-heading{gap:12px}}

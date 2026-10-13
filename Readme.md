@@ -1,4 +1,4 @@
-# Chess Board Application
+# Royal Board
 
 A simple two-player chess application built with **Java 21, Spring Boot, React.js, and Vite**. The backend handles chess rules and move validation, while the frontend displays an interactive 8×8 chessboard.
 
@@ -28,6 +28,8 @@ The project is designed to demonstrate **object-oriented programming (OOP)** con
 - Implement castling, en passant, and automatic queen promotion through backend rules
 - Evaluate check, checkmate, and stalemate using the existing evaluator
 - Display chess pieces using Unicode symbols instead of image files
+- Protect every chess API endpoint with stateless Spring Security authentication
+- Responsive sign-in and game workspace with turn state and move history
 
 ## Project Structure
 
@@ -70,13 +72,28 @@ Chess-Board-Application/
 
 ## How It Works
 
-1. React requests the board and current game status from Spring Boot.
-2. The user clicks a chess piece and then a destination square.
-3. React sends the source position, destination position, and move type to the backend.
-4. `ChessGameController` receives the request and calls `ChessGameService`.
+1. React opens `/ws/chess` and authenticates through the WebSocket connection.
+2. Spring sends the authoritative board, turn, and game status through a `STATE` message.
+3. The user clicks a chess piece and then a destination square.
+4. React sends a `MOVE` message containing the source, destination, and move type.
 5. `ChessGame` uses the validator, special-move rules, and game-state evaluator to decide whether the move is allowed.
 6. If accepted, the backend updates the board and changes the current turn.
-7. React fetches the updated board and status.
+7. Spring broadcasts the updated board and status to every authenticated socket.
+
+## WebSocket Protocol
+
+The frontend uses `ws://localhost:8080/ws/chess` in development. Authentication
+is the first socket message, so credentials are not placed in a URL:
+
+```json
+{"type":"AUTHENTICATE","username":"player","password":"chess123"}
+```
+
+Game commands use `START_GAME`, `MOVE`, and `UNDO`. The backend responds with
+`AUTHENTICATED`, `STATE`, or `ERROR` messages. `STATE` messages include an event
+name (`SYNC`, `MOVE`, `MOVE_UNDONE`, or `GAME_STARTED`) and the authoritative board, status,
+and current turn. Successful state changes are broadcast to all authenticated
+connections.
 
 ## REST API Endpoints
 
@@ -88,6 +105,7 @@ Base URL: `http://localhost:8080/api/chess`
 | `GET` | `/board` | Get the current chessboard |
 | `POST` | `/move` | Attempt a chess move |
 | `GET` | `/status` | Get game status and current turn |
+| `GET` | `/me` | Get the authenticated player's username |
 
 ### Example: Make a Move
 
@@ -144,6 +162,20 @@ mvn spring-boot:run
 ```
 
 The backend should run at `http://localhost:8080`.
+
+The API uses HTTP Basic authentication. For local development, sign in with
+`player` / `chess123`. Override both values outside local development:
+
+```powershell
+$env:CHESS_USERNAME="your-player-name"
+$env:CHESS_PASSWORD="use-a-strong-password"
+$env:CHESS_ALLOWED_ORIGIN="http://localhost:5173"
+.\mvnw.cmd spring-boot:run
+```
+
+The backend is stateless, passwords are encoded through Spring Security's
+delegating password encoder, and the frontend keeps the Basic credential only
+in the browser session (it is cleared when the tab is closed).
 
 **Database configuration:** The current implementation does not use a database. If Spring Boot tries to configure a DataSource because JPA is installed, remove the unused JPA dependency or configure the appropriate auto-configuration exclusion for your Spring Boot version.
 

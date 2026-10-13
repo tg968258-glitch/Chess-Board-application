@@ -3,6 +3,7 @@ package com.chess.chessboard.evaluator;
 import com.chess.chessboard.enums.Color;
 import com.chess.chessboard.enums.GameStatus;
 import com.chess.chessboard.enums.MoveType;
+import com.chess.chessboard.enums.PieceType;
 import com.chess.chessboard.model.Board;
 import com.chess.chessboard.model.Move;
 import com.chess.chessboard.model.Position;
@@ -103,7 +104,8 @@ public class StandardGameStateEvaluator implements GameStateEvaluator {
                             type = MoveType.PROMOTION;
                         }
 
-                        Move move = new Move(from, to, piece, null, type);
+                        Move move = new Move(from, to, piece, null, type,
+                                type == MoveType.PROMOTION ? PieceType.QUEEN : null);
 
                         if (!validator.validate(board, move)) {
                             continue;

@@ -2,6 +2,7 @@ package com.chess.chessboard.rules;
 
 import com.chess.chessboard.enums.Color;
 import com.chess.chessboard.enums.MoveType;
+import com.chess.chessboard.enums.PieceType;
 import com.chess.chessboard.model.*;
 import com.chess.chessboard.pieces.*;
 
@@ -25,7 +26,12 @@ public class PromotionRule implements GameRule {
 
         int lastRow = pawn.getColor() == Color.WHITE ? 7 : 0;
 
-        return move.getTo().getRow() == lastRow
+        PieceType promotion = move.getPromotionPieceType();
+
+        return promotion != null
+                && promotion != PieceType.KING
+                && promotion != PieceType.PAWN
+                && move.getTo().getRow() == lastRow
                 && pawn.isValidMove(board, move.getFrom(), move.getTo());
     }
 }

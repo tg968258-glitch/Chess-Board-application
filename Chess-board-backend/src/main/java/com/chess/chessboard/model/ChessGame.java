@@ -121,4 +121,40 @@ public class ChessGame {
 
         return true;
     }
+
+    public boolean undoLastMove() {
+        if (board == null || moveHistory == null) {
+            return false;
+        }
+
+        Move move = moveHistory.undo();
+        if (move == null) {
+            return false;
+        }
+
+        Position from = move.getFrom();
+        Position to = move.getTo();
+
+        board.getSquare(from).setPiece(move.getPiece());
+        board.getSquare(to).setPiece(move.getCapturedPiece());
+
+        if (move.getMoveType() == MoveType.EN_PASSANT) {
+            board.getSquare(to).setPiece(null);
+            board.getSquare(new Position(from.getRow(), to.getColumn()))
+                    .setPiece(move.getCapturedPiece());
+        }
+
+        if (move.getMoveType() == MoveType.CASTLING) {
+            int rookFrom = to.getColumn() == 6 ? 7 : 0;
+            int rookTo = to.getColumn() == 6 ? 5 : 3;
+            board.movePiece(
+                    new Position(from.getRow(), rookTo),
+                    new Position(from.getRow(), rookFrom)
+            );
+        }
+
+        switchTurn();
+        status = evaluator.evaluate(board, currentTurn);
+        return true;
+    }
 }

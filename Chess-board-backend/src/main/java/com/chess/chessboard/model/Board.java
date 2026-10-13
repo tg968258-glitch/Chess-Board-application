@@ -5,7 +5,6 @@ import com.chess.chessboard.enums.MoveType;
 import com.chess.chessboard.enums.PieceType;
 import com.chess.chessboard.factory.PieceFactory;
 import com.chess.chessboard.pieces.Piece;
-import com.chess.chessboard.pieces.Queen;
 import lombok.Getter;
 
 @Getter
@@ -92,7 +91,8 @@ public class Board {
         movePiece(from, to);
 
         if (move.getMoveType() == MoveType.PROMOTION) {
-            getSquare(to).setPiece(new Queen(piece.getColor()));
+            getSquare(to).setPiece(PieceFactory.createPiece(
+                    move.getPromotionPieceType(), piece.getColor()));
         }
     }
 

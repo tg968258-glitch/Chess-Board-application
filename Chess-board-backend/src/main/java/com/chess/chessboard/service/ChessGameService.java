@@ -2,6 +2,7 @@ package com.chess.chessboard.service;
 
 import com.chess.chessboard.enums.GameStatus;
 import com.chess.chessboard.enums.MoveType;
+import com.chess.chessboard.enums.PieceType;
 import com.chess.chessboard.model.*;
 import com.chess.chessboard.pieces.Piece;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,8 @@ public class ChessGameService {
         chessGame = new ChessGame(white, black);
         chessGame.start();
     }
-    public boolean makeMove(int fromRow, int fromColumn, int toRow, int toColumn, MoveType moveType) {
+    public boolean makeMove(int fromRow, int fromColumn, int toRow, int toColumn,
+                            MoveType moveType, PieceType promotionPieceType) {
         if (!isValidPosition(fromRow, fromColumn)
                 || !isValidPosition(toRow, toColumn)
                 || moveType == null) {
@@ -27,7 +29,7 @@ public class ChessGameService {
 
         Piece piece = chessGame.getBoard().getSquare(from).getPiece();
 
-        Move move = new Move(from, to, piece, null, moveType);
+        Move move = new Move(from, to, piece, null, moveType, promotionPieceType);
         return chessGame.makeMove(move);
     }
     public Board getBoard() {
@@ -35,6 +37,9 @@ public class ChessGameService {
     }
     public GameStatus getStatus() {
         return chessGame.getStatus();
+    }
+    public boolean undoLastMove() {
+        return chessGame.undoLastMove();
     }
     public ChessGame getGame() {
         return chessGame;
