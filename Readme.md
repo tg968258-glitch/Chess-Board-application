@@ -95,6 +95,29 @@ name (`SYNC`, `MOVE`, `MOVE_UNDONE`, or `GAME_STARTED`) and the authoritative bo
 and current turn. Successful state changes are broadcast to all authenticated
 connections.
 
+### Production WebSocket configuration
+
+Vite's `server.proxy` only runs during `npm run dev`; it is not part of the
+production build. If the frontend and backend are deployed on different hosts,
+set this variable in the **frontend** hosting service before building:
+
+```text
+VITE_WS_URL=https://your-backend.onrender.com
+```
+
+The frontend converts `https` to `wss` and appends `/ws/chess`. A complete URL
+such as `wss://your-backend.onrender.com/ws/chess` is also accepted. In the
+backend hosting service, allow the exact deployed frontend origin (with no path
+or trailing slash):
+
+```text
+CHESS_ALLOWED_ORIGIN=https://your-frontend.example.com
+```
+
+After changing `VITE_WS_URL`, rebuild/redeploy the frontend because Vite embeds
+`VITE_*` values at build time. The backend must also support WebSocket upgrade
+requests on `/ws/chess`.
+
 ## REST API Endpoints
 
 Base URL: `http://localhost:8080/api/chess`
@@ -190,7 +213,7 @@ npm run dev
 
 Open the address shown by Vite, usually `http://localhost:5173`.
 
-### 3. Configure the Vite Proxy
+### 3. Configure the Vite Development Proxy
 
 Make sure `vite.config.js` forwards API calls to Spring Boot:
 
@@ -204,6 +227,11 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "http://localhost:8080",
+        changeOrigin: true
+      },
+      "/ws": {
+        target: "ws://localhost:8080",
+        ws: true,
         changeOrigin: true
       }
     }

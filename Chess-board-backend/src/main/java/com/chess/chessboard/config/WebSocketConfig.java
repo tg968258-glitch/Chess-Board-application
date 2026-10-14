@@ -7,6 +7,8 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
@@ -23,6 +25,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(chessWebSocketHandler, "/ws/chess")
-                .setAllowedOrigins(allowedOrigin.split(","));
+                .setAllowedOrigins(Arrays.stream(allowedOrigin.split(","))
+                        .map(String::trim)
+                        .filter(origin -> !origin.isEmpty())
+                        .toArray(String[]::new));
     }
 }

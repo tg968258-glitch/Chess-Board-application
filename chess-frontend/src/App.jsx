@@ -12,6 +12,20 @@ const PROMOTION_OPTIONS = [
   { type: "KNIGHT", label: "Knight", symbols: { WHITE: "♘", BLACK: "♞" } },
 ];
 
+function webSocketUrl() {
+  const configuredUrl = import.meta.env.VITE_WS_URL?.trim();
+  if (!configuredUrl) {
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    return `${protocol}//${window.location.host}/ws/chess`;
+  }
+
+  const url = new URL(configuredUrl, window.location.href);
+  if (url.protocol === "https:") url.protocol = "wss:";
+  if (url.protocol === "http:") url.protocol = "ws:";
+  if (url.pathname === "/") url.pathname = "/ws/chess";
+  return url.toString();
+}
+
 function squareName(row, column) { return `${FILES[column]}${row + 1}`; }
 function formatTime(totalSeconds) {
   const minutes = Math.floor(totalSeconds / 60);
@@ -74,8 +88,7 @@ function App() {
   useEffect(() => {
     if (!credentials) return;
     const [user, password] = atob(credentials).split(/:(.*)/s);
-    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const socket = new WebSocket(`${protocol}//${window.location.host}/ws/chess`);
+    const socket = new WebSocket(webSocketUrl());
     socketRef.current = socket;
 
     socket.onopen = () => socket.send(JSON.stringify({ type: authCommand, username: user, password }));
